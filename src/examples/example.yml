@@ -1,7 +1,6 @@
 ---
 description: >
-  This is a sample executor using Docker and Node. If you want to provide a custom
-  environment in your orb, insert your image here.
+  This is a sample executor using Docker and Node.
 
 # Provide a use-case based example for using this orb.
 # Everything in the `usage` section will be displayed in the orb registry.
