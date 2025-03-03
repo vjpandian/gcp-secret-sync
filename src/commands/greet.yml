@@ -1,6 +1,7 @@
 ---
 description: >
-  This command echos "Hello World" using file inclusion.
+  This is a sample executor using Docker and Node. If you want to provide a custom
+  environment in your orb, insert your image here.
 
 # What will this command do?
 # Descriptions should be short, simple, and clear.

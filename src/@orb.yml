@@ -1,7 +1,8 @@
 version: 2.1
 
 description: >
-  Sample orb description
+  This is a sample executor using Docker and Node. If you want to provide a custom
+  environment in your orb, insert your image here.
 # What will your orb allow users to accomplish?
 # Descriptions should be short, simple, and informative.
 
