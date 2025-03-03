@@ -1,6 +1,6 @@
 ---
 description: >
-  This is a sample executor using Docker and Node.
+  This is a sample executor using Docker and Node for running applications
 
 docker:
   - image: 'cimg/node:<<parameters.tag>>'

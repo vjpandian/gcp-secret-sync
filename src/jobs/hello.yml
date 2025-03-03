@@ -1,6 +1,6 @@
 ---
 description: >
-  This is a sample executor using Docker and Node.
+  This is a sample executor using Docker and Node for running applications
 
 # What will this job do?
 

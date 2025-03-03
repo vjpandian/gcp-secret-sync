@@ -2,8 +2,7 @@
 version: 2.1
 
 description: >
-  This is a sample executor using Docker and Node.
-  Executors using Docker and Node as well.
+  This is a sample executor using Docker and Node for running applications
 
 # This information will be displayed in the orb registry and is not mandatory.
 display:
