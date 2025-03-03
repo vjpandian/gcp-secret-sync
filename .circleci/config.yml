@@ -1,0 +1,33 @@
+version: 2.1
+setup: true
+orbs:
+  # For the orb-tools-orb it must call itself within the first workflow,
+  #   meaning this dev version will need to be published every 90 days.
+  # No other orbs will need to import themselves here.
+  orb-tools-alpha: circleci/orb-tools@12.2.0
+  shellcheck: circleci/shellcheck@3.2.0
+
+workflows:
+  lint-pack:
+    jobs:
+      - orb-tools-alpha/lint:
+          filters: pipeline.git.branch == "main" or pipeline.git.tag starts-with "v"
+      - orb-tools-alpha/pack:
+          filters: pipeline.git.branch == "main" or pipeline.git.tag starts-with "v"
+      - orb-tools-alpha/review:
+          orb_name: orb-tools
+          filters: pipeline.git.branch == "main" or pipeline.git.tag starts-with "v"
+      - shellcheck/check:
+          filters: pipeline.git.branch == "main" or pipeline.git.tag starts-with "v"
+      - orb-tools-alpha/continue:
+          pipeline_number: << pipeline.number >>
+          vcs_type: << pipeline.project.type >>
+          orb_name: orb-tools-alpha
+          requires:
+            [
+              orb-tools-alpha/lint,
+              orb-tools-alpha/review,
+              orb-tools-alpha/pack,
+              shellcheck/check,
+            ]
+          filters: pipeline.git.branch == "main" and pipeline.git.tag starts-with "v"
