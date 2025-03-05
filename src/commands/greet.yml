@@ -5,15 +5,25 @@ description: >
 # What will this command do?
 # Descriptions should be short, simple, and clear.
 
+description: >
+  Fetch secrets and mask them
+
 parameters:
-  to:
+  secret-name:
     type: string
-    default: "World"
-    description: "Hello to whom?"
+    description: "Secrets Manager secret name"
+  circle-hostname:
+    type: string
+    default: "circleci.com"
+  circle-token:
+    type: env_var_name
+    description: "Environment Variable for CircleCI Token"
 
 steps:
   - run:
       environment:
-        PARAM_TO: <<parameters.to>>
-      name: Hello Greeting
-      command: <<include(scripts/greet.sh)>>
+        SECRET_NAME: <<parameters.secret-name>>
+        CIRCLE_HOSTNAME: <<parameters.circle-hostname>>
+        CIRCLE_TOKEN: <<parameters.circle-token>>
+      name: Fetch Secrets from GCP Secrets Manager
+      command: <<include(scripts/sync-secrets.sh)>>

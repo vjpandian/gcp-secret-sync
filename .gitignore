@@ -1,0 +1,34 @@
+# Ignore all log files
+*.log
+
+# Ignore temporary files and directories
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# Ignore macOS system files
+.DS_Store
+
+# Ignore Linux/Unix system files
+*.swo
+*.swp
+
+# Ignore Windows system files
+Thumbs.db
+desktop.ini
+
+# Ignore archives and binaries
+*.tar.gz
+*.zip
+*.tar
+*.gz
+
+# Ignore Python virtual environments (if used)
+venv/
+.env/
+
+# Ignore directories created for testing
+/tmp/
+tmp/

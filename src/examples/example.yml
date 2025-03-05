@@ -9,9 +9,9 @@ description: >
 usage:
   version: 2.1
   orbs:
-    <orb-name>: <namespace>/<orb-name>@1.2.3
+    <orb-name>: vjpandian/gcp-secrets-sync@0.0.1
 
-  workflows:
-    use-my-orb:
+ jobs:
+    sample-deploy-job:
       jobs:
         - <orb-name>/<job-name>
