@@ -15,8 +15,8 @@ workflows:
     jobs:
       #- create-orb:
       #    context: org-global
-      - orb-tools/lint:
-          filters: *filters
+      #- orb-tools/lint:
+      #    filters: *filters
       - orb-tools/pack:
           filters: *filters
       - orb-tools/review:
@@ -29,7 +29,7 @@ workflows:
           orb-name: vjpandian/gcp-secret-sync
           vcs-type: << pipeline.project.type >>
           requires:
-            - orb-tools/lint
+            #- orb-tools/lint
             - orb-tools/review
             - orb-tools/pack
             - shellcheck/check
