@@ -1,3 +1,6 @@
+
+echo $SHELL
+
 echo "🔍 Starting CircleCI Environment Variable Setup..."
 
 # Step 1: Check for required dependencies
