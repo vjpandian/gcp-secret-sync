@@ -9,15 +9,16 @@ description: >
   Fetch secrets and mask them
 
 parameters:
-  secret-name:
+  secret_name:
     type: string
     description: "Secrets Manager secret name"
-  circle-hostname:
+  circle_hostname:
     type: string
     default: "circleci.com"
-  circle-token:
+  circle_token:
     type: env_var_name
     description: "Environment Variable for CircleCI Token"
+    default: CIRCLE_TOKEN
 
 steps:
   - run:

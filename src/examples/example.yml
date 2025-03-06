@@ -9,9 +9,52 @@ description: >
 usage:
   version: 2.1
   orbs:
-    <orb-name>: vjpandian/gcp-secrets-sync@0.0.1
+    gcp-secret-sync: vjpandian/gcp-secrets-sync@0.0.1
+    gcp-cli: circleci/gcp-cli@3.2.2
 
- jobs:
-    sample-deploy-job:
+  parameters:
+    build-image:
+      type: boolean
+      default: false
+    gcp-project-number:
+      type: string
+      default: "948713269042"
+    gcp-project-id:    
+      default: "dev-awesomeci"
+      type: string
+    oidc-wip-pool:
+      type: string
+      default: "awesome-circleci-oidc-pool"
+    oidc-wip-provider:
+      type: string
+      default: "oidc-cci-provider"
+    gcp-sa:
+      type: string
+      default: "awesome-ca-service-account@dev-awesome-pandian.iam.gserviceaccount.com"
+
+  executors:
+    docker-default:
+      docker:
+        - image: cimg/python:3.13.2
+      resource_class: small
+      environment: 
+        GOOGLE_PROJECT_NUMBER: << pipeline.parameters.gcp-project-number >>
+        GOOGLE_PROJECT_ID: << pipeline.parameters.gcp-project-number >>
+        OIDC_WIP_PROVIDER_ID: << pipeline.parameters.oidc-wip-provider >>
+        OIDC_WIP_ID: << pipeline.parameters.oidc-wip-pool >>
+        OIDC_SERVICE_ACCOUNT_EMAIL: << pipeline.parameters.gcp-sa >>
+        DOCKER_IMAGE: << pipeline.parameters.image-name >>
+
+  jobs:
+    sample-deploy:
+      docker:
+        - image: cimg/base:current
+      steps:
+        - checkout
+        - gcp-secret-sync/sync-secrets:
+              secret-name: "my-prod-secrets"
+  
+  workflows:
+    gcp-deploy-demo:
       jobs:
-        - <orb-name>/<job-name>
+        - sample-deploy
