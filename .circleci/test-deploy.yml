@@ -1,40 +1,48 @@
 version: 2.1
+
 orbs:
-  orb-tools-alpha: {}
+  gcp-secret-sync: vjpandian/gcp-secret-sync@dev:alpha
+  orb-tools: circleci/orb-tools@11.5
+  gcp-cli: circleci/gcp-cli@3.2.2
+
+parameters:
+  secret_name:
+    type: string
+    default: "google-cloud-gar-secrets"
 
 filters: &filters
   tags:
     only: /.*/
 
+jobs:
+  gcp-secret-sync-test:
+    docker:
+      - image: cimg/python:3.13.2
+    steps:
+      - checkout
+      - gcp-secret-sync/sync-secrets:
+          secret_name: << pipeline.parameters.secret_name >>
+
+
 workflows:
   test-deploy:
     jobs:
-      - orb-tools-alpha/lint:
+      # Make sure to include "filters: *filters" in every test job you want to run as part of your deployment.
+      - gcp-secret-sync-test:
           filters: *filters
-      - orb-tools-alpha/pack:
+      - orb-tools/pack:
           filters: *filters
-      - orb-tools-alpha/review:
-          orb_name: orb-tools
-          filters: *filters
-      - orb-tools-alpha/publish:
-          name: publish_dev_test
-          orb_name: vjpandian/gcp-secret-sync
-          vcs_type: <<pipeline.project.type>>
-          pub_type: dev
-          github_token: GHI_TOKEN
+      - orb-tools/publish:
+          orb-name: vjpandian/gcp-secret-sync
+          vcs-type: << pipeline.project.type >>
+          pub-type: production
           requires:
-            [orb-tools-alpha/lint, orb-tools-alpha/review, orb-tools-alpha/pack]
+            - orb-tools/pack
+            - gcp-secret-sync-test
           context: org-global
-      - orb-tools-alpha/publish:
-          orb_name: vjpandian/gcp-secret-sync
-          vcs_type: <<pipeline.project.type>>
-          pub_type: production
-          requires:
-            [orb-tools-alpha/lint, orb-tools-alpha/review, orb-tools-alpha/pack, publish_dev_test]
-          context: orb-global
-          #github_token: GHI_TOKEN
           filters:
             branches:
               ignore: /.*/
             tags:
               only: /^v[0-9]+\.[0-9]+\.[0-9]+$/
+

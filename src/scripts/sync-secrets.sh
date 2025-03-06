@@ -30,5 +30,6 @@ while IFS=$'\t' read -r key value; do
       --header "Circle-Token: ${CIRCLE_TOKEN}" \
       --header 'Content-Type: application/json' \
       --data "{\"name\":\"$ENV_VAR_NAME\",\"value\":\"$value\"}"
+    exit 1
   fi
 done
