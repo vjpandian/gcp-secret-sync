@@ -36,7 +36,6 @@ response=$(curl -vvv --request GET \
 
 # Print the full response (for debugging)
 echo "🔍 DEBUG: Full Response:"
-echo "$response"
 
 # Check if the response contains "200"
 if echo "$response" | grep -q "200"; then
