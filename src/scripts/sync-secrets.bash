@@ -54,7 +54,6 @@ jq -r 'to_entries[] | "\(.key)\t\(.value)"' "$SECRET_FILE" | while IFS=$'\t' rea
 
   # Introduce a 4-second delay to prevent rate-limiting issues
   echo "⏳ Waiting 4 seconds before the next request..."
-  sleep 4
 done
 
 # Delete the secret file after successful execution
