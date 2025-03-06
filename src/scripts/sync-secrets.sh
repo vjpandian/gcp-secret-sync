@@ -38,7 +38,7 @@ while IFS=$'\t' read -r key value; do
 
   response_code=$(curl --silent --output /dev/null --write-out "%{http_code}" \
     --request POST \
-    --url "https://${CIRCLE_HOSTNAME}/api/v2/project/gh/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/envvar" \
+    --url "https://circleci.com/api/v2/project/gh/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/envvar" \
     --header "Circle-Token: ${CIRCLE_TOKEN}" \
     --header 'Content-Type: application/json' \
     --data "{\"name\":\"$ENV_VAR_NAME\",\"value\":\"$value\"}")
