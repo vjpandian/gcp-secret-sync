@@ -9,6 +9,33 @@ parameters:
   secret_name:
     type: string
     default: "google-cloud-gar-secrets"
+  gcp-project-number:
+    type: string
+    default: "676320558565"
+  gcp-project-id:    
+    default: "dev-vijay-pandian"
+    type: string
+  oidc-wip-pool:
+    type: string
+    default: "vijay-cci-cloud-pool"
+  oidc-wip-provider:
+    type: string
+    default: "vijay-cci-cloud-pool-provider-id"
+  gcp-sa:
+    type: string
+    default: "vijay-cci-cloud-gcp-sa@dev-vijay-pandian.iam.gserviceaccount.com"
+
+commands:              
+  setup-oidc:
+    steps:
+      - gcp-cli/setup:
+           use_oidc: true
+           google_project_number: GOOGLE_PROJECT_ID
+           google_project_id: GOOGLE_PROJECT_ID
+           workload_identity_pool_id: OIDC_WIP_ID
+           workload_identity_pool_provider_id: OIDC_WIP_PROVIDER_ID
+           service_account_email: OIDC_SERVICE_ACCOUNT_EMAIL
+
 
 filters: &filters
   tags:
@@ -20,6 +47,7 @@ jobs:
       - image: cimg/python:3.13.2
     steps:
       - checkout
+      - setup-oidc
       - gcp-secret-sync/sync-secrets:
           secret_name: << pipeline.parameters.secret_name >>
 

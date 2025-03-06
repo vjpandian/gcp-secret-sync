@@ -39,7 +39,6 @@ usage:
         OIDC_WIP_PROVIDER_ID: << pipeline.parameters.oidc-wip-provider >>
         OIDC_WIP_ID: << pipeline.parameters.oidc-wip-pool >>
         OIDC_SERVICE_ACCOUNT_EMAIL: << pipeline.parameters.gcp-sa >>
-        DOCKER_IMAGE: << pipeline.parameters.image-name >>
 
   jobs:
     sample-deploy:
