@@ -57,7 +57,7 @@ jobs:
       - checkout
       - setup-oidc
       - gcp-secret-sync/sync-secrets:
-          secret-name: "my-prod-secrets"
+          secret_name: "google-cloud-gar-secrets"
 
 
 workflows:

@@ -47,7 +47,7 @@ usage:
       steps:
         - checkout
         - gcp-secret-sync/sync-secrets:
-            secret-name: "my-prod-secrets"
+            secret_name: "my-prod-secrets"
 
   workflows:
     gcp-deploy-demo:
