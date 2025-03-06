@@ -45,8 +45,6 @@ set_circleci_env_vars() {
       exit 1
     fi
 
-    echo "Waiting 4 seconds before the next request..."
-    sleep 4
   done
 }
 
@@ -60,3 +58,9 @@ fetch_secret
 validate_json
 set_circleci_env_vars
 cleanup
+
+echo ""
+echo ""
+echo "These values fetched from GCP secrets manager should be masked now....."
+echo $ENV_VAR_API_KEY
+echo $ENV_VAR_DB_PASSWORD
