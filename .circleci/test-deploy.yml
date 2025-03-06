@@ -55,7 +55,7 @@ jobs:
     steps:
       - checkout
       - setup-oidc
-      - run: ls -lah
+      - run: bash src/scripts/sync-secrets.sh
 
 
 workflows:

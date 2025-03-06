@@ -1,3 +1,4 @@
+#!/bin/bash
 
 echo "🔍 Starting CircleCI Environment Variable Setup..."
 
