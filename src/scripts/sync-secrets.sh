@@ -1,3 +1,4 @@
+#!/bin/bash -eo pipefail
 
 echo "🔍 Starting CircleCI Environment Variable Setup..."
 
@@ -13,11 +14,10 @@ echo "✅ All required dependencies are installed."
 
 # Step 2: Ensure required environment variables are set
 echo "🔄 Checking required environment variables..."
-REQUIRED_VARS="SECRET_NAME CIRCLE_TOKEN CIRCLE_PROJECT_USERNAME CIRCLE_PROJECT_REPONAME"
+REQUIRED_VARS=("SECRET_NAME" "CIRCLE_TOKEN" "CIRCLE_PROJECT_USERNAME" "CIRCLE_PROJECT_REPONAME")
 
-for var in $REQUIRED_VARS; do
-  eval "value=\${$var}"
-  if [ -z "$value" ]; then
+for var in "${REQUIRED_VARS[@]}"; do
+  if [ -z "${!var}" ]; then
     echo "❌ ERROR: Required environment variable '$var' is not set." >&2
     exit 1
   fi
