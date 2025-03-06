@@ -68,13 +68,13 @@ echo "$SECRET_JSON" | jq -r 'to_entries[] | "\(.key)\t\(.value)"' | while IFS=$'
   ENV_VAR_NAME="ENV_VAR_$(echo "$key" | tr '[:lower:]/.-' '[:upper:]___')"
   SAFE_VALUE="$(echo "$value" | jq -sRr @json)"  # Escape special characters
 
-  response="$(curl --silent --request POST --url "https://circleci.com/api/v2/project/gh/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/envvar" --header "Circle-Token: $CIRCLE_TOKEN" --header 'Content-Type: application/json' --data "{\"name\":\"$ENV_VAR_NAME\",\"value\":$SAFE_VALUE}\"")"
-
-  if echo "$response" | jq -e '.name' >/dev/null 2>&1; then
+  post_response="$(curl --silent --request POST --url "https://circleci.com/api/v2/project/gh/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/envvar" --header "Circle-Token: $CIRCLE_TOKEN" --header 'Content-Type: application/json' --data "{\"name\":\"$ENV_VAR_NAME\",\"value\":$SAFE_VALUE}\"")"
+  echo $post_response
+  if echo "$post_response" | jq -e '.name' >/dev/null 2>&1; then
     echo "✅ Successfully set $ENV_VAR_NAME"
   else
     echo "❌ ERROR: Failed to set $ENV_VAR_NAME"
-    echo "🔍 Response: $response"
+    echo "🔍 Response: $post_response"
     exit 1
   fi
 done
