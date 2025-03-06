@@ -1,5 +1,3 @@
-#!/bin/bash
-set -euo pipefail
 
 # Ensure required commands are available
 for cmd in curl jq gcloud; do
@@ -10,22 +8,22 @@ for cmd in curl jq gcloud; do
 done
 
 # Extract hostname from CIRCLE_BUILD_URL and explicitly export it
-if [ -z "${CIRCLE_HOSTNAME:-}" ]; then
-  if [ -n "${CIRCLE_BUILD_URL:-}" ]; then
-    temp=${CIRCLE_BUILD_URL#*://}       # Remove scheme (https://)
-    CIRCLE_HOSTNAME=${temp%%/*}         # Extract hostname
-    export CIRCLE_HOSTNAME
-
-    if [ "$CIRCLE_HOSTNAME" = "circleci.com" ]; then
-      echo -e "\033[1;32mCircleCI Cloud (circleci.com) detected!\033[0m"
-    else
-      echo -e "\033[1;33mServer install detected! Hostname: $CIRCLE_HOSTNAME\033[0m"
-    fi
-  else
-    echo "ERROR: CIRCLE_BUILD_URL is not set; can't determine CIRCLE_HOSTNAME." >&2
-    exit 1
-  fi
-fi
+#if [ -z "${CIRCLE_HOSTNAME:-}" ]; then
+#  if [ -n "${CIRCLE_BUILD_URL:-}" ]; then
+#    temp=${CIRCLE_BUILD_URL#*://}       # Remove scheme (https://)
+#    CIRCLE_HOSTNAME=${temp%%/*}         # Extract hostname
+#    export CIRCLE_HOSTNAME
+#
+#    if [ "$CIRCLE_HOSTNAME" = "circleci.com" ]; then
+#      echo -e "\033[1;32mCircleCI Cloud (circleci.com) detected!\033[0m"
+#    else
+#      echo -e "\033[1;33mServer install detected! Hostname: $CIRCLE_HOSTNAME\033[0m"
+#    fi
+#  else
+#    echo "ERROR: CIRCLE_BUILD_URL is not set; can't determine CIRCLE_HOSTNAME." >&2
+#    exit 1
+#  fi
+#fi
 
 # Ensure required variables are set explicitly
 : "${SECRET_NAME:?}" "${CIRCLE_HOSTNAME:?}" "${CIRCLE_PROJECT_USERNAME:?}" "${CIRCLE_PROJECT_REPONAME:?}" "${CIRCLE_TOKEN:?}"
