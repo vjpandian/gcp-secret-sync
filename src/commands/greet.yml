@@ -1,9 +1,4 @@
 ---
-description: >
-  This is a sample executor using Docker and Node for running applications
-
-# What will this command do?
-# Descriptions should be short, simple, and clear.
 
 description: >
   Fetch secrets and mask them
