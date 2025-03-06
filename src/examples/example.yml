@@ -5,7 +5,7 @@ description: >
 usage:
   version: 2.1
   orbs:
-    gcp-secret-sync: vjpandian/gcp-secrets-sync@0.0.1
+    gcp-secret-sync: vjpandian/gcp-secret-sync@0.0.1
     gcp-cli: circleci/gcp-cli@3.2.2
 
   parameters:

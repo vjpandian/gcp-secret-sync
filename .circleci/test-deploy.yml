@@ -18,7 +18,7 @@ workflows:
           filters: *filters
       - orb-tools-alpha/publish:
           name: publish_dev_test
-          orb_name: vjpandian/gcp-secrets-sync
+          orb_name: vjpandian/gcp-secret-sync
           vcs_type: <<pipeline.project.type>>
           pub_type: dev
           github_token: GHI_TOKEN
@@ -26,7 +26,7 @@ workflows:
             [orb-tools-alpha/lint, orb-tools-alpha/review, orb-tools-alpha/pack]
           context: org-global
       - orb-tools-alpha/publish:
-          orb_name: vjpandian/gcp-secrets-sync
+          orb_name: vjpandian/gcp-secret-sync
           vcs_type: <<pipeline.project.type>>
           pub_type: production
           requires:
