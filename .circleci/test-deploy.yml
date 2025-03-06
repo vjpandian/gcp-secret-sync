@@ -55,8 +55,7 @@ jobs:
     steps:
       - checkout
       - setup-oidc
-      - gcp-secret-sync/sync-secrets:
-          secret_name: << pipeline.parameters.secret_name >>
+      - run: ls -lah
 
 
 workflows:
