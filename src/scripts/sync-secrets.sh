@@ -46,10 +46,9 @@ SECRET_JSON=$(gcloud secrets versions access latest --secret="$SECRET_NAME" 2>/d
 }
 echo "✅ Successfully retrieved secret from GCP."
 
-# Step 5: Validate JSON format
+# Step 5: Validate JSON format (SC2181 Fix)
 echo "🔄 Validating secret JSON format..."
-echo "$SECRET_JSON" | jq empty >/dev/null 2>&1
-if [ $? -ne 0 ]; then
+if ! echo "$SECRET_JSON" | jq empty >/dev/null 2>&1; then
   echo "❌ ERROR: Retrieved secret is not valid JSON." >&2
   exit 1
 fi
