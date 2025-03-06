@@ -80,4 +80,5 @@ echo "$SECRET_JSON" | jq -r 'to_entries[] | "\(.key)\t\(.value)"' | while IFS=$'
   fi
 done
 
+
 echo "🎉✅ All environment variables have been set successfully in CircleCI!"
