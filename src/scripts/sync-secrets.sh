@@ -1,9 +1,6 @@
 echo "🔍 Starting CircleCI Environment Variable Setup..."
 
-env | grep CIRCLE_TOKEN
-
-
-# Step 1: Check for required commands
+# Step 1: Check for required dependencies
 echo "🔄 Checking required dependencies..."
 for cmd in curl jq gcloud; do
   if ! command -v "$cmd" &>/dev/null; then
@@ -24,13 +21,18 @@ for var in "${REQUIRED_VARS[@]}"; do
 done
 echo "✅ All required environment variables are set."
 
-# Step 3: Validate CircleCI API token
+# Step 3: Validate CircleCI API token correctly
 echo "🔄 Validating CircleCI API token..."
-if ! curl -s -o /dev/null -w "%{http_code}" -X GET "https://circleci.com/api/v2/me" --header "Circle-Token: ${CIRCLE_TOKEN}" | grep -q "200"; then
-  echo "❌ ERROR: Invalid CircleCI API token or insufficient permissions." >&2
+response_code=$(curl -s -o /dev/null -w "%{http_code}" \
+  -X GET "https://circleci.com/api/v2/me" \
+  --header "Circle-Token: ${CIRCLE_TOKEN}")
+
+if [[ "$response_code" -eq 200 ]]; then
+  echo "✅ CircleCI API token is valid."
+else
+  echo "❌ ERROR: Invalid CircleCI API token or insufficient permissions (Response: $response_code)" >&2
   exit 1
 fi
-echo "✅ CircleCI API token is valid."
 
 # Step 4: Fetch secret from GCP
 echo "🔄 Fetching secret from Google Cloud..."
