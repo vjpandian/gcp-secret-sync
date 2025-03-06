@@ -1,3 +1,5 @@
+
+#!/bin/bash -eo pipefail
 #!/bin/bash
 
 set -e  # Exit on error
