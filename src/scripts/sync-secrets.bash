@@ -51,9 +51,8 @@ SECRET_JSON="$(gcloud secrets versions access latest --secret="$SECRET_NAME" 2>/
   exit 1
 }
 echo "✅ Successfully retrieved secret from GCP."
-echo "$SECRET_JSON"
 
-# Step 5: Validate JSON format
+# Validate JSON
 echo "🔄 Validating secret JSON format..."
 if ! echo "$SECRET_JSON" | jq empty >/dev/null 2>&1; then
   echo "❌ ERROR: Retrieved secret is not valid JSON." >&2
@@ -61,12 +60,13 @@ if ! echo "$SECRET_JSON" | jq empty >/dev/null 2>&1; then
 fi
 echo "✅ Secret JSON is valid."
 
-# Step 6: Process JSON and set environment variables in CircleCI
+# Process and upload each key-value pair
 echo "🔄 Setting environment variables in CircleCI..."
 echo "$SECRET_JSON" | jq -r 'to_entries[] | "\(.key)\t\(.value)"' | while IFS=$'\t' read -r key value; do
   ENV_VAR_NAME="ENV_VAR_$(echo "$key" | tr '[:lower:]/.-' '[:upper:]___')"
-  SAFE_VALUE="$(echo "$value" | jq -sRr @json)"  # Escape special characters
+  SAFE_VALUE="$(echo "$value" | tr -d '\n' | jq -Rr @json)"  # Remove newlines, escape JSON
 
+  # Send request and extract HTTP status
   http_code=$(curl --silent --write-out "%{http_code}" --output /dev/null \
     --request POST \
     --url "https://circleci.com/api/v2/project/gh/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/envvar" \
