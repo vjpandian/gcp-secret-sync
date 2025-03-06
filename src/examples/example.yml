@@ -26,7 +26,7 @@ usage:
       default: "oidc-cci-provider"
     gcp-sa:
       type: string
-      default: "awesome-ca-service-account@dev-awesome-pandian.iam.gserviceaccount.com"
+      default: "awesome-ca-sa@gcp-project.iam.gserviceaccount.com"
 
   executors:
     docker-default:
