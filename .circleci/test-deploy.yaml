@@ -24,15 +24,15 @@ workflows:
           github_token: GHI_TOKEN
           requires:
             [orb-tools-alpha/lint, orb-tools-alpha/review, orb-tools-alpha/pack]
-          context: orb-publisher
+          context: org-global
       - orb-tools-alpha/publish:
-          orb_name: circleci/orb-tools
+          orb_name: vjpandian/gcp-secrets-sync
           vcs_type: <<pipeline.project.type>>
           pub_type: production
           requires:
             [orb-tools-alpha/lint, orb-tools-alpha/review, orb-tools-alpha/pack, publish_dev_test]
-          context: orb-publisher
-          github_token: GHI_TOKEN
+          context: orb-global
+          #github_token: GHI_TOKEN
           filters:
             branches:
               ignore: /.*/

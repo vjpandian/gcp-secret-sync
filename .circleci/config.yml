@@ -1,33 +1,45 @@
 version: 2.1
 setup: true
 orbs:
-  # For the orb-tools-orb it must call itself within the first workflow,
-  #   meaning this dev version will need to be published every 90 days.
-  # No other orbs will need to import themselves here.
-  orb-tools-alpha: circleci/orb-tools@12.2.0
-  shellcheck: circleci/shellcheck@3.2.0
+  orb-tools: circleci/orb-tools@11.5
+  shellcheck: circleci/shellcheck@3.1
+  cli: circleci/circleci-cli@0.1.9
+
+filters: &filters
+  tags:
+    only: /.*/
+
 
 workflows:
   lint-pack:
     jobs:
-      - orb-tools-alpha/lint:
-          filters: pipeline.git.branch == "main" or pipeline.git.tag starts-with "v"
-      - orb-tools-alpha/pack:
-          filters: pipeline.git.branch == "main" or pipeline.git.tag starts-with "v"
-      - orb-tools-alpha/review:
-          orb_name: orb-tools
-          filters: pipeline.git.branch == "main" or pipeline.git.tag starts-with "v"
+      #- create-orb:
+      #    context: org-global
+      - orb-tools/lint:
+          filters: *filters
+      - orb-tools/pack:
+          filters: *filters
+      - orb-tools/review:
+          filters: *filters
       - shellcheck/check:
-          filters: pipeline.git.branch == "main" or pipeline.git.tag starts-with "v"
-      - orb-tools-alpha/continue:
-          pipeline_number: << pipeline.number >>
-          vcs_type: << pipeline.project.type >>
-          orb_name: orb-tools-alpha
+          shell: bash
+          filters: *filters
+      - orb-tools/publish:
+          orb-name: vjpandian/continuation
+          vcs-type: << pipeline.project.type >>
           requires:
-            [
-              orb-tools-alpha/lint,
-              orb-tools-alpha/review,
-              orb-tools-alpha/pack,
-              shellcheck/check,
-            ]
-          filters: pipeline.git.branch == "main" and pipeline.git.tag starts-with "v"
+            - orb-tools/lint
+            - orb-tools/review
+            - orb-tools/pack
+            - shellcheck/check
+      
+          # Use a context to hold your publishing token.
+          context: org-global
+          filters: *filters
+      # Triggers the next workflow in the Orb Development Kit.
+      - orb-tools/continue:
+          pipeline-number: << pipeline.number >>
+          vcs-type: << pipeline.project.type >>
+          requires: 
+            - orb-tools/publish
+          filters: *filters
