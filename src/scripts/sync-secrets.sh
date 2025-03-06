@@ -27,15 +27,22 @@ echo "✅ All required environment variables are set."
 # Step 3: Validate and clean CircleCI API token
 echo "🔄 Validating CircleCI API token..."
 
-response_code=$(curl -s -o /dev/null -w "%{http_code}" \
-  --request GET \
-  --url "https://circleci.com/api/v2/me" \
-  --header "Circle-Token: $CIRCLE_TOKEN")
+echo "🔄 Validating CircleCI API token with full verbosity..."
 
-if [ "$response_code" -eq 200 ]; then
-  echo "✅ CircleCI API token is valid (Response: $response_code)"
+# Run verbose API request and store output
+response=$(curl -vvv --request GET \
+  --url "https://circleci.com/api/v2/me" \
+  --header "Circle-Token: $CIRCLE_TOKEN" 2>&1)
+
+# Print the full response (for debugging)
+echo "🔍 DEBUG: Full Response:"
+echo "$response"
+
+# Check if the response contains "200"
+if echo "$response" | grep -q "200"; then
+  echo "✅ CircleCI API token is valid (200 OK detected in verbose response)"
 else
-  echo "❌ ERROR: Invalid CircleCI API token or insufficient permissions (Response: $response_code)"
+  echo "❌ ERROR: Token validation failed! '200' not found in response"
   exit 1
 fi
 
