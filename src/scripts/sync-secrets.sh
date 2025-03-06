@@ -8,11 +8,12 @@ for cmd in curl jq gcloud; do
   fi
 done
 
-# Extract hostname from CIRCLE_BUILD_URL if CIRCLE_HOSTNAME is not set
+# Extract hostname from CIRCLE_BUILD_URL and explicitly export it
 if [ -z "${CIRCLE_HOSTNAME}" ]; then
   if [ -n "${CIRCLE_BUILD_URL}" ]; then
     temp=${CIRCLE_BUILD_URL#*://}       # Remove scheme (https://)
     CIRCLE_HOSTNAME=${temp%%/*}         # Extract hostname
+    export CIRCLE_HOSTNAME
 
     if [ "$CIRCLE_HOSTNAME" = "circleci.com" ]; then
       echo -e "\033[1;32mCircleCI Cloud (circleci.com) detected!\033[0m"
