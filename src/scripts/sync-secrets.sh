@@ -1,5 +1,5 @@
 
-echo $SHELL
+echo "$SHELL"
 
 echo "🔍 Starting CircleCI Environment Variable Setup..."
 
