@@ -27,19 +27,18 @@ echo "✅ All required environment variables are set."
 # Step 3: Validate and clean CircleCI API token
 echo "🔄 Validating CircleCI API token..."
 
-# Trim newlines from CIRCLE_TOKEN to prevent formatting issues
-CIRCLE_TOKEN=$(echo "$CIRCLE_TOKEN" | tr -d '\n')
+response_code=$(curl -s -o /dev/null -w "%{http_code}" \
+  --request GET \
+  --url "https://circleci.com/api/v2/me" \
+  --header "Circle-Token: $CIRCLE_TOKEN")
 
-# Ensure `curl` is properly formatted inside `$(...)`
-response="$(curl --silent --request GET --url "https://circleci.com/api/v2/me" --header "Circle-Token: $CIRCLE_TOKEN")"
-
-if echo "$response" | jq -e '.id' >/dev/null 2>&1; then
-  echo "✅ CircleCI API token is valid."
+if [ "$response_code" -eq 200 ]; then
+  echo "✅ CircleCI API token is valid (Response: $response_code)"
 else
-  echo "❌ ERROR: Invalid CircleCI API token or insufficient permissions."
-  echo "🔍 Response: $response"
+  echo "❌ ERROR: Invalid CircleCI API token or insufficient permissions (Response: $response_code)"
   exit 1
 fi
+
 
 # Step 4: Fetch secret from GCP
 echo "🔄 Fetching secret from Google Cloud..."
