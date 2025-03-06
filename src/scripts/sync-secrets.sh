@@ -1,4 +1,3 @@
-#!/bin/sh
 
 echo "🔍 Starting CircleCI Environment Variable Setup..."
 
@@ -25,8 +24,12 @@ for var in $REQUIRED_VARS; do
 done
 echo "✅ All required environment variables are set."
 
-# Step 3: Validate CircleCI API token correctly
+# Step 3: Validate and clean CircleCI API token
 echo "🔄 Validating CircleCI API token..."
+
+# Trim newlines from CIRCLE_TOKEN to prevent formatting issues
+CIRCLE_TOKEN=$(echo "$CIRCLE_TOKEN" | tr -d '\n')
+
 response=$(curl --silent --request GET \
   --url "https://circleci.com/api/v2/me" \
   --header "Circle-Token: $CIRCLE_TOKEN")
