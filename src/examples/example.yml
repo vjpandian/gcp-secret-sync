@@ -2,10 +2,6 @@
 description: >
   This is a sample executor using Docker and Node for running applications
 
-# Provide a use-case based example for using this orb.
-# Everything in the `usage` section will be displayed in the orb registry.
-# Comments are not retained.
-
 usage:
   version: 2.1
   orbs:
@@ -19,7 +15,7 @@ usage:
     gcp-project-number:
       type: string
       default: "948713269042"
-    gcp-project-id:    
+    gcp-project-id:
       default: "dev-awesomeci"
       type: string
     oidc-wip-pool:
@@ -37,7 +33,7 @@ usage:
       docker:
         - image: cimg/python:3.13.2
       resource_class: small
-      environment: 
+      environment:
         GOOGLE_PROJECT_NUMBER: << pipeline.parameters.gcp-project-number >>
         GOOGLE_PROJECT_ID: << pipeline.parameters.gcp-project-number >>
         OIDC_WIP_PROVIDER_ID: << pipeline.parameters.oidc-wip-provider >>
@@ -52,8 +48,8 @@ usage:
       steps:
         - checkout
         - gcp-secret-sync/sync-secrets:
-              secret-name: "my-prod-secrets"
-  
+            secret-name: "my-prod-secrets"
+
   workflows:
     gcp-deploy-demo:
       jobs:
