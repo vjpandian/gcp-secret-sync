@@ -45,6 +45,7 @@ jobs:
   gcp-secret-sync-test:
     docker:
       - image: cimg/python:3.13.2
+    resource_class: small
     environment: &common_env
       GOOGLE_PROJECT_NUMBER: << pipeline.parameters.gcp-project-number >>
       GOOGLE_PROJECT_ID: << pipeline.parameters.gcp-project-number >>
@@ -55,7 +56,8 @@ jobs:
     steps:
       - checkout
       - setup-oidc
-      - run: bash src/scripts/sync-secrets.sh
+      - gcp-secret-sync/sync-secrets:
+          secret-name: "my-prod-secrets"
 
 
 workflows:
