@@ -1,5 +1,8 @@
 echo "🔍 Starting CircleCI Environment Variable Setup..."
 
+env | grep CIRCLE_TOKEN
+
+
 # Step 1: Check for required commands
 echo "🔄 Checking required dependencies..."
 for cmd in curl jq gcloud; do
