@@ -31,7 +31,7 @@ set_circleci_env_vars() {
 
     echo "Sending request to CircleCI for $ENV_VAR_NAME..."
     http_code=$(curl --noproxy "*" --silent --show-error --request POST \
-      --url "https://circleci.com/api/v2/project/gh/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/envvar" \
+      --url "https://server-rc.gke.sphereci.com/api/v2/project/gh/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/envvar" \
       --header "Circle-Token: $CIRCLE_TOKEN" \
       --header 'Content-Type: application/json' \
       --data "{\"name\":\"$ENV_VAR_NAME\",\"value\":$SAFE_VALUE}" \
