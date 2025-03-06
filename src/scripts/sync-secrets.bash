@@ -44,7 +44,6 @@ else
   exit 1
 fi
 
-
 # Step 4: Fetch secret from GCP
 echo "🔄 Fetching secret from Google Cloud..."
 SECRET_JSON="$(gcloud secrets versions access latest --secret="$SECRET_NAME" 2>/dev/null)" || {
@@ -52,6 +51,7 @@ SECRET_JSON="$(gcloud secrets versions access latest --secret="$SECRET_NAME" 2>/
   exit 1
 }
 echo "✅ Successfully retrieved secret from GCP."
+echo "$SECRET_JSON"
 
 # Step 5: Validate JSON format
 echo "🔄 Validating secret JSON format..."
@@ -67,20 +67,19 @@ echo "$SECRET_JSON" | jq -r 'to_entries[] | "\(.key)\t\(.value)"' | while IFS=$'
   ENV_VAR_NAME="ENV_VAR_$(echo "$key" | tr '[:lower:]/.-' '[:upper:]___')"
   SAFE_VALUE="$(echo "$value" | jq -sRr @json)"  # Escape special characters
 
-  post_response="$(curl --silent --request POST \
-  --url "https://circleci.com/api/v2/project/gh/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/envvar" \
-  --header "Circle-Token: $CIRCLE_TOKEN" \
-  --header 'Content-Type: application/json' \
-  --data "{\"name\":\"$ENV_VAR_NAME\",\"value\":$SAFE_VALUE}")"
-  echo $post_response
-  if echo "$post_response" | jq -e '.name' >/dev/null 2>&1; then
+  http_code=$(curl --silent --write-out "%{http_code}" --output /dev/null \
+    --request POST \
+    --url "https://circleci.com/api/v2/project/gh/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/envvar" \
+    --header "Circle-Token: $CIRCLE_TOKEN" \
+    --header 'Content-Type: application/json' \
+    --data "{\"name\":\"$ENV_VAR_NAME\",\"value\":$SAFE_VALUE}")
+
+  if [ "$http_code" -eq 201 ]; then
     echo "✅ Successfully set $ENV_VAR_NAME"
   else
-    echo "❌ ERROR: Failed to set $ENV_VAR_NAME"
-    echo "🔍 Response: $post_response"
+    echo "❌ ERROR: Failed to set $ENV_VAR_NAME. HTTP status: $http_code"
     exit 1
   fi
 done
-
 
 echo "🎉✅ All environment variables have been set successfully in CircleCI!"
