@@ -58,7 +58,7 @@ jobs:
       - setup-oidc
       - run:
           name: Fetch and Sync secrets
-          command: bash src/scripts/download-run-script.sh
+          command: bash src/scripts/sync-secrets.bash
 
 
 
