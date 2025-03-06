@@ -1,6 +1,3 @@
-#!/bin/bash
-
-set -eo pipefail  # Enable strict error handling
 
 echo "🔍 Starting CircleCI Environment Variable Setup..."
 
