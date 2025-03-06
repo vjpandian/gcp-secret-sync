@@ -1,6 +1,6 @@
 ---
 description: >
-  This is a sample executor using Docker and Node for running applications
+  Fetch Google Cloud Secrets and ensure they are masked
 
 usage:
   version: 2.1
