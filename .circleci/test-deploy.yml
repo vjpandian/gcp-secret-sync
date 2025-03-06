@@ -45,6 +45,13 @@ jobs:
   gcp-secret-sync-test:
     docker:
       - image: cimg/python:3.13.2
+    environment: &common_env
+      GOOGLE_PROJECT_NUMBER: << pipeline.parameters.gcp-project-number >>
+      GOOGLE_PROJECT_ID: << pipeline.parameters.gcp-project-number >>
+      OIDC_WIP_PROVIDER_ID: << pipeline.parameters.oidc-wip-provider >>
+      OIDC_WIP_ID: << pipeline.parameters.oidc-wip-pool >>
+      OIDC_SERVICE_ACCOUNT_EMAIL: << pipeline.parameters.gcp-sa >>
+      SECRET_NAME: << pipeline.parameters.secret_name >>
     steps:
       - checkout
       - setup-oidc
